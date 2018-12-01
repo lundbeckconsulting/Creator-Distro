@@ -1,0 +1,8 @@
+{
+	"name": "Creator",
+	"version", "v1.0.4",
+	"directory": "creator",
+	"dependencies": {
+		"jquery": "v3.3.1"
+	}
+}
