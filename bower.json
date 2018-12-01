@@ -1,8 +1,27 @@
 {
-	"name": "Creator",
-	"version", "v1.0.4",
-	"directory": "creator",
-	"dependencies": {
-		"jquery": "v3.3.1"
-	}
+  "name": "creator-distro",
+  "version": "v1.0.4",
+  "directory": "creator",
+  "dependencies": {
+    "jquery": "v3.3.1"
+  },
+  "main": "creator.js, creator.css",
+  "homepage": "https://github.com/lundbeckconsulting/Creator-Distro",
+  "authors": [
+    "Stein Lundbeck"
+  ],
+  "description": "Version 1.0.4 of Creator",
+  "keywords": [
+    "responsive",
+    "framework",
+    "html"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
