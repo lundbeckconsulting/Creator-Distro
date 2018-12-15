@@ -3,11 +3,15 @@
   "version": "1.0.4",
   "description": "A small lightweight framework for modern responsive web design",
   "main": "creator.js",
-  "repository": "https://github.com/lundbeckconsulting/Creator-Distro",
+  "repository": {
+	"url": "https://github.com/lundbeckconsulting/Creator-Distro",
+	"type": "git"
+	},
   "author": "Lundbeck Consulting <post@lundbeckconsulting.no>",
+  "homepage": "https://lundbeckconsulting.no",
   "license": "MIT",
-  "private": false,
   "dependencies": {
-    "creator": "^0.2.0"
-  }
+    "jquery": "^3.3.1"
+  },
+  "files": ["/Files/*.css", "/Files/*.js"]
 }
