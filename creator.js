@@ -44,14 +44,12 @@ $(document).ready(function () {
 
         $modalBlack.fadeIn("slow", function () {
             $("#" + idModal).fadeIn("fast", function () {
-                $("#" + idModal).trigger("modal:show", [{ id: id }]);               
+                $("#" + idModal).trigger("modal:show", [{ id: id }]);
             });
         });
     });
 
     $(".close-modal").click(function (event) {
-        console.log("close-modal");
-
         event.preventDefault();
 
         CloseAllModals();

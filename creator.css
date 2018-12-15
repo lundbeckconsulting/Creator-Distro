@@ -2089,6 +2089,7 @@ a.btn-symbol {
     transition-property: all; }
 
 .notifier-default-left {
+  background-color: #484848;
   float: right;
   top: 0;
   bottom: 0;
@@ -2118,6 +2119,7 @@ a.btn-symbol {
     text-align: right; }
 
 .notifier-default-right {
+  background-color: #484848;
   float: right;
   top: 0;
   bottom: 0;
@@ -2147,6 +2149,7 @@ a.btn-symbol {
     text-align: right; }
 
 .notifier-default-top {
+  background-color: #484848;
   top: 0;
   bottom: unset;
   left: 0;
@@ -2175,6 +2178,7 @@ a.btn-symbol {
     text-align: right; }
 
 .notifier-default-bottom {
+  background-color: #484848;
   top: unset;
   bottom: 0;
   left: 0;
@@ -2336,6 +2340,7 @@ a.btn-default, span.btn-default {
     transition-property: all; }
 
 .notifier-primary-left {
+  background-color: #2990ff;
   float: right;
   top: 0;
   bottom: 0;
@@ -2365,6 +2370,7 @@ a.btn-default, span.btn-default {
     text-align: right; }
 
 .notifier-primary-right {
+  background-color: #2990ff;
   float: right;
   top: 0;
   bottom: 0;
@@ -2394,6 +2400,7 @@ a.btn-default, span.btn-default {
     text-align: right; }
 
 .notifier-primary-top {
+  background-color: #2990ff;
   top: 0;
   bottom: unset;
   left: 0;
@@ -2422,6 +2429,7 @@ a.btn-default, span.btn-default {
     text-align: right; }
 
 .notifier-primary-bottom {
+  background-color: #2990ff;
   top: unset;
   bottom: 0;
   left: 0;
@@ -2575,6 +2583,7 @@ a.btn-primary, span.btn-primary {
     pointer-events: none; }
 
 .notifier-disabled-left {
+  background-color: darkgray;
   float: right;
   top: 0;
   bottom: 0;
@@ -2604,6 +2613,7 @@ a.btn-primary, span.btn-primary {
     text-align: right; }
 
 .notifier-disabled-right {
+  background-color: darkgray;
   float: right;
   top: 0;
   bottom: 0;
@@ -2633,6 +2643,7 @@ a.btn-primary, span.btn-primary {
     text-align: right; }
 
 .notifier-disabled-top {
+  background-color: darkgray;
   top: 0;
   bottom: unset;
   left: 0;
@@ -2661,6 +2672,7 @@ a.btn-primary, span.btn-primary {
     text-align: right; }
 
 .notifier-disabled-bottom {
+  background-color: darkgray;
   top: unset;
   bottom: 0;
   left: 0;
@@ -2810,6 +2822,7 @@ a.btn-disabled, span.btn-disabled {
     transition-property: all; }
 
 .notifier-success-left {
+  background-color: #26ac45;
   float: right;
   top: 0;
   bottom: 0;
@@ -2839,6 +2852,7 @@ a.btn-disabled, span.btn-disabled {
     text-align: right; }
 
 .notifier-success-right {
+  background-color: #26ac45;
   float: right;
   top: 0;
   bottom: 0;
@@ -2868,6 +2882,7 @@ a.btn-disabled, span.btn-disabled {
     text-align: right; }
 
 .notifier-success-top {
+  background-color: #26ac45;
   top: 0;
   bottom: unset;
   left: 0;
@@ -2896,6 +2911,7 @@ a.btn-disabled, span.btn-disabled {
     text-align: right; }
 
 .notifier-success-bottom {
+  background-color: #26ac45;
   top: unset;
   bottom: 0;
   left: 0;
@@ -3057,6 +3073,7 @@ a.btn-success, span.btn-success {
     transition-property: all; }
 
 .notifier-danger-left {
+  background-color: #d12938;
   float: right;
   top: 0;
   bottom: 0;
@@ -3086,6 +3103,7 @@ a.btn-success, span.btn-success {
     text-align: right; }
 
 .notifier-danger-right {
+  background-color: #d12938;
   float: right;
   top: 0;
   bottom: 0;
@@ -3115,6 +3133,7 @@ a.btn-success, span.btn-success {
     text-align: right; }
 
 .notifier-danger-top {
+  background-color: #d12938;
   top: 0;
   bottom: unset;
   left: 0;
@@ -3143,6 +3162,7 @@ a.btn-success, span.btn-success {
     text-align: right; }
 
 .notifier-danger-bottom {
+  background-color: #d12938;
   top: unset;
   bottom: 0;
   left: 0;
@@ -3304,6 +3324,7 @@ a.btn-danger, span.btn-danger {
     transition-property: all; }
 
 .notifier-warning-left {
+  background-color: #ffcb30;
   float: right;
   top: 0;
   bottom: 0;
@@ -3333,6 +3354,7 @@ a.btn-danger, span.btn-danger {
     text-align: right; }
 
 .notifier-warning-right {
+  background-color: #ffcb30;
   float: right;
   top: 0;
   bottom: 0;
@@ -3362,6 +3384,7 @@ a.btn-danger, span.btn-danger {
     text-align: right; }
 
 .notifier-warning-top {
+  background-color: #ffcb30;
   top: 0;
   bottom: unset;
   left: 0;
@@ -3390,6 +3413,7 @@ a.btn-danger, span.btn-danger {
     text-align: right; }
 
 .notifier-warning-bottom {
+  background-color: #ffcb30;
   top: unset;
   bottom: 0;
   left: 0;
@@ -3551,6 +3575,7 @@ a.btn-warning, span.btn-warning {
     transition-property: all; }
 
 .notifier-info-left {
+  background-color: #2dc9e8;
   float: right;
   top: 0;
   bottom: 0;
@@ -3580,6 +3605,7 @@ a.btn-warning, span.btn-warning {
     text-align: right; }
 
 .notifier-info-right {
+  background-color: #2dc9e8;
   float: right;
   top: 0;
   bottom: 0;
@@ -3609,6 +3635,7 @@ a.btn-warning, span.btn-warning {
     text-align: right; }
 
 .notifier-info-top {
+  background-color: #2dc9e8;
   top: 0;
   bottom: unset;
   left: 0;
@@ -3637,6 +3664,7 @@ a.btn-warning, span.btn-warning {
     text-align: right; }
 
 .notifier-info-bottom {
+  background-color: #2dc9e8;
   top: unset;
   bottom: 0;
   left: 0;
@@ -3798,6 +3826,7 @@ a.btn-info, span.btn-info {
     transition-property: all; }
 
 .notifier-safe-left {
+  background-color: #478d9e;
   float: right;
   top: 0;
   bottom: 0;
@@ -3827,6 +3856,7 @@ a.btn-info, span.btn-info {
     text-align: right; }
 
 .notifier-safe-right {
+  background-color: #478d9e;
   float: right;
   top: 0;
   bottom: 0;
@@ -3856,6 +3886,7 @@ a.btn-info, span.btn-info {
     text-align: right; }
 
 .notifier-safe-top {
+  background-color: #478d9e;
   top: 0;
   bottom: unset;
   left: 0;
@@ -3884,6 +3915,7 @@ a.btn-info, span.btn-info {
     text-align: right; }
 
 .notifier-safe-bottom {
+  background-color: #478d9e;
   top: unset;
   bottom: 0;
   left: 0;
@@ -4045,6 +4077,7 @@ a.btn-safe, span.btn-safe {
     transition-property: all; }
 
 .notifier-light-left {
+  background-color: #f4f4f4;
   float: right;
   top: 0;
   bottom: 0;
@@ -4074,6 +4107,7 @@ a.btn-safe, span.btn-safe {
     text-align: right; }
 
 .notifier-light-right {
+  background-color: #f4f4f4;
   float: right;
   top: 0;
   bottom: 0;
@@ -4103,6 +4137,7 @@ a.btn-safe, span.btn-safe {
     text-align: right; }
 
 .notifier-light-top {
+  background-color: #f4f4f4;
   top: 0;
   bottom: unset;
   left: 0;
@@ -4131,6 +4166,7 @@ a.btn-safe, span.btn-safe {
     text-align: right; }
 
 .notifier-light-bottom {
+  background-color: #f4f4f4;
   top: unset;
   bottom: 0;
   left: 0;
@@ -4292,6 +4328,7 @@ a.btn-light, span.btn-light {
     transition-property: all; }
 
 .notifier-dark-left {
+  background-color: #141414;
   float: right;
   top: 0;
   bottom: 0;
@@ -4321,6 +4358,7 @@ a.btn-light, span.btn-light {
     text-align: right; }
 
 .notifier-dark-right {
+  background-color: #141414;
   float: right;
   top: 0;
   bottom: 0;
@@ -4350,6 +4388,7 @@ a.btn-light, span.btn-light {
     text-align: right; }
 
 .notifier-dark-top {
+  background-color: #141414;
   top: 0;
   bottom: unset;
   left: 0;
@@ -4378,6 +4417,7 @@ a.btn-light, span.btn-light {
     text-align: right; }
 
 .notifier-dark-bottom {
+  background-color: #141414;
   top: unset;
   bottom: 0;
   left: 0;
@@ -4563,6 +4603,12 @@ a.btn-dark, span.btn-dark {
 
 .justify-between {
   justify-content: space-between; }
+
+.float-xs-left {
+  float: left; }
+
+.float-xs-right {
+  float: right; }
 
 .mrg-xs {
   margin: 4px; }
@@ -4814,6 +4860,12 @@ a.btn-dark, span.btn-dark {
     .col-xs-12 {
       flex: 1 1 100%;
       max-width: 100%; } }
+
+.float-sm-left {
+  float: left; }
+
+.float-sm-right {
+  float: right; }
 
 .mrg-sm {
   margin: 8px; }
@@ -5084,6 +5136,12 @@ a.btn-dark, span.btn-dark {
   input[type='hidden']#creator-orientation {
     z-index: 1 !important; } }
 
+.float-md-left {
+  float: left; }
+
+.float-md-right {
+  float: right; }
+
 .mrg-md {
   margin: 16px; }
 
@@ -5353,6 +5411,12 @@ a.btn-dark, span.btn-dark {
   input[type='hidden']#creator-orientation {
     z-index: 2 !important; } }
 
+.float-lg-left {
+  float: left; }
+
+.float-lg-right {
+  float: right; }
+
 .mrg-lg {
   margin: 24px; }
 
@@ -5621,6 +5685,12 @@ a.btn-dark, span.btn-dark {
     z-index: 3 !important; }
   input[type='hidden']#creator-orientation {
     z-index: 3 !important; } }
+
+.float-xl-left {
+  float: left; }
+
+.float-xl-right {
+  float: right; }
 
 .mrg-xl {
   margin: 32px; }
