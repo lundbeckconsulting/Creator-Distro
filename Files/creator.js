@@ -1,544 +1,306 @@
-"use strict";
+'use strict';
 
-$(document).ready(function () {
-    var $media = $("#lc-common-media");
-    var $modalBlack;
-    var modalWild = "[class^='modal']",
-        modalWildVisible = modalWild + ":visible";
+var C = {
+    Query: {
+        exists: function exists(name) {
+            var result = location.search.indexOf(name + "=") > 0;
 
-    (function Init() {
-        InitModal();
-    })();
+            return result;
+        },
+        param: function param(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
 
-    $media.on("resize", function (event, sizeInt, size, orientation) {});
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var result = regex.exec(location.search);
 
-    $(".c-content-details").find("div.link-wrap > input.link").click(function () {
-        var $wrap = this.closest(".c-content-details");
-
-        $(this).slideUp("fast", function () {
-            $(this).removeClass("virgin");
-            $($wrap).find("div.main-wrap").slideDown("slow");
-        });
-    });
-
-    function InitModal() {
-        if ($(modalWild).length > 0) {
-            var $elm = document.createElement("div");
-            $elm.id = CREATOR.Const.ModalBlackoutName;
-
-            $("body").prepend($elm);
-
-            $modalBlack = $("#" + CREATOR.Const.ModalBlackoutName);
+            return result === null ? '' : decodeURIComponent(result[1].replace(/\+/g, ' '));
         }
-    }
-
-    $(".show-modal").click(function (event) {
-        var idModal = $(this).data("modal-id");
-        var id = -1;
-
-        if ($(this).data("id") !== null) {
-            id = parseInt($(this).data("id"));
-        }
-
-        event.preventDefault();
-
-        $modalBlack.fadeIn("slow", function () {
-            $("#" + idModal).fadeIn("fast", function () {
-                $("#" + idModal).trigger("modal:show", [{ id: id }]);
-            });
-        });
-    });
-
-    $(".close-modal").click(function (event) {
-        event.preventDefault();
-
-        CloseAllModals();
-    });
-
-    $("#" + CREATOR.Const.ModalBlackoutName).click(function () {
-        CloseAllModals();
-    });
-
-    $(document).keyup(function (key) {
-        if (key.keyCode === 27) {
-            if ($modalBlack.is(":visible")) {
-                CloseAllModals();
+    },
+    DateTime: {
+        Current: {
+            date: function date() {
+                return new Date();
+            },
+            time: function time() {
+                return C.DateTime.Current.date().getTime();
+            },
+            long: function long() {
+                return C.DateTime.toLongDate(C.DateTime.date());
+            },
+            short: function short() {
+                return C.DateTime.toShortDate(C.DateTime.date());
             }
+        },
+        toLongDate: function toLongDate(date) {
+            var result = C.DateTime.toShortDate(date) + " " + date.getUTCHours() + ":" + date.getUTCMinutes() + "." + date.getUTCSeconds();
+
+            return result;
+        },
+        toShortDate: function toShortDate(date) {
+            var result = date.getUTCDay() + "." + (date.getUTCMonth() + 1) + "." + date.getUTCFullYear();
+
+            return result;
+        },
+        subtractDays: function subtractDays(days) {
+            var result = C.DateTime.Current.date;
+
+            result.setDate(result.getDate() - days);
+
+            return result;
         }
-    });
+    },
+    Common: {
+        siteId: function siteId() {
+            var result = $("#lc-common-site-id").val();
 
-    function CloseModal($modal) {
-        var callback = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-
-        $($modal).fadeOut("fast", function () {
-            $($modal).trigger("modal:close");
-
-            if ($(modalWildVisible).length == 0) {
-                $modalBlack.fadeOut("slow", function () {
-                    fireCallback();
+            return parseInt(result);
+        },
+        appId: function appId(callback) {
+            if (C.Common.siteId() > 0) {
+                C.Ajax.Invoke(null, "Site", "GetSite", { "id": C.Common.siteId() }, null, "GET", function (result) {
+                    if (!C.State.isEmpty(callback)) {
+                        callback(result.id);
+                    }
                 });
+            }
+        },
+        isDevelopment: function isDevelopment() {
+            var result = -1;
+            var $elm = $("#lc-common-is-development");
+
+            if (!C.State.isEmpty($elm)) {
+                if ($.isNumeric($elm.val())) {
+                    result = parseInt($elm.val());
+                }
+            }
+
+            return C.Cast.toBool(result);
+        },
+        creds: function creds(callback) {
+            var url = "/SECURE/creds.json";
+
+            if (C.Utility.fileExists(url)) {
+                C.API.Ajax.GetJSON(url, success);
             } else {
-                fireCallback();
+                C.Console.error("creds.json doesn't exists. \"" + url + "\"");
             }
 
-            function fireCallback() {
-                if (callback != null) {
-                    callback();
-                }
+            function success(data) {
+                callback(data);
             }
-        });
-    }
-
-    function CloseAllModals() {
-        var $modals = $(modalWildVisible);
-
-        $.each($modals, function (key, value) {
-            CloseModal(this);
-        });
-    }
-});
-
-
-"use strict";
-
-$(document).ready(function () {
-    var resizeTimer;
-    var $media = $("#creator-media");
-    var $mediaOrientation = $("#creator-media-orientation");
-
-    (function Init() {
-        InitRows();
-        InitMedia();
-    })();
-
-    $(window).on('resize', function (e) {
-        HandleResize();
-    });
-
-    function InitMedia() {
-        $media.data("base", $media.css("z-index"));
-        $mediaOrientation.data("base", $media.css("z-index"));
-
-        HandleResize(true);
-    };
-
-    function InitRows() {
-        $.each($(".row"), function (i) {
-            var $row = $(this);
-            var $cols = $row.find("div[class^='col']");
-            var $container = $("<div></div>").attr("row-id", i).addClass("row-container");
-
-            $row.attr("id", i);
-
-            $cols.each(function (ii) {
-                var $col = $(this);
-
-                $($col).addClass("r");
-
-                $col.attr("id", ii);
-                $col.attr("row", i);
-
-                if (!$col.hasClass("col")) {
-                    $($col).detach();
-                    $($col).appendTo($container);
-                }
-            });
-
-            $row.after($container);
-        });
-    };
-
-    function HandleResize() {
-        var forceTrigger = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
-
-        clearTimeout(resizeTimer);
-
-        resizeTimer = setTimeout(function () {
-            var runTrigger = false;
-
-            if ($media.data("base") !== $media.css("z-index")) {
-                $media.data("base", $media.css("z-index"));
-
-                runTrigger = true;
-            }
-
-            if ($mediaOrientation.data("base") !== $mediaOrientation.css("z-index")) {
-                $mediaOrientation.data("base", $mediaOrientation.css("z-index"));
-
-                runTrigger = true;
-            }
-
-            if (runTrigger || forceTrigger) {
-                var sizeInt = $media.css("z-index");
-                var size = "xs";
-                var orientation = "landscape";
-
-                switch (parseInt($media.css("z-index"))) {
-                    case 1:
-                        size = "sm";
-                        break;
-
-                    case 2:
-                        size = "md";
-                        break;
-
-                    case 3:
-                        size = "lg";
-                        break;
-
-                    case 4:
-                        size = "xl";
-                        break;
-                }
-
-                switch ($mediaOrientation.css("z-index")) {
-                    case 1:
-                        orientation = "portrait";
-                        break;
-
-                    case 2:
-                        orientation = "landscape";
-                        break;
-                }
-
-                HandleRows(size);
-
-                $media.trigger("resize", [sizeInt, size, orientation]);
-            }
-        }, 250);
-    }
-
-    function HandleRows(size) {
-        $.each($(".row"), function (index) {
-            var $row = $(this);
-            var rowId = parseInt($row.attr("id"));
-            var sizeList = [],
-                downSizeList = [];
-
-            switch (size.toUpperCase()) {
-                case "XS":
-                    sizeList = ["XS"];
-                    downSizeList = ["SM", "MD", "LG", "XL"];
-                    break;
-
-                case "SM":
-                    sizeList = ["XS", "SM"];
-                    downSizeList = ["MD", "LG", "XL"];
-                    break;
-
-                case "MD":
-                    sizeList = ["XS", "SM", "MD"];
-                    downSizeList = ["LG", "XL"];
-                    break;
-
-                case "LG":
-                    sizeList = ["XS", "SM", "MD", "LG"];
-                    downSizeList = ["XL"];
-                    break;
-
-                case "XL":
-                    sizeList = ["XS", "SM", "MD", "LG", "XL"];
-                    break;
-            }
-
-            $.each(downSizeList, function (i, val) {
-                $.each($row.find("div[class^='col-" + val.toLowerCase() + "']"), function (ii) {
-                    var $col = $(this);
-                    var $container = $("div.row-container[row-id='" + rowId + "']");
-
-                    $col.addClass("r");
-
-                    $col.detach();
-                    $container.append($col);
-                });
-            });
-
-            $.each(sizeList, function (i, val) {
-                $.each($("div.row-container"), function (i) {
-                    var $container = $(this);
-                    var $r = $(".row[id='" + $container.attr("row-id") + "']");
-
-                    $.each($container.find("div[class^='col-" + val.toLowerCase() + "']"), function (ii) {
-                        var $col = $(this);
-
-                        $col.removeClass("r");
-
-                        $col.detach();
-                        $r.append($col);
-                    });
-                });
-            });
-
-            $(".row[id='" + rowId + "'] div[class^='col']").sort(function (a, b) {
-                a = Number($(a).attr("id"));
-                b = Number($(b).attr("id"));
-
-                return a - b;
-            }).appendTo(".row[id='" + rowId + "']");
-        });
-    }
-});
-
-
-"use strict";
-
-var CREATOR = {
-    PUB: {
-        DateTime: {
-            Current: {
-                date: function date() {
-                    return new Date();
-                },
-                time: function time() {
-                    return CREATOR.PUB.DateTime.Current.date().getTime();
-                },
-                long: function long() {
-                    return CREATOR.PUB.DateTime.toLongDate(CREATOR.DateTime.date());
-                },
-                short: function short() {
-                    return CREATOR.PUB.DateTime.toShortDate(CREATOR.DateTime.date());
-                }
-            },
-            toLongDate: function toLongDate(date) {
-                var result = CREATOR.PUB.DateTime.toShortDate(date) + " " + date.getUTCHours() + ":" + date.getUTCMinutes() + "." + date.getUTCSeconds();
-
-                return result;
-            },
-            toShortDate: function toShortDate(date) {
-                var result = date.getUTCDay() + "." + (date.getUTCMonth() + 1) + "." + date.getUTCFullYear();
-
-                return result;
-            },
-            subtractDays: function subtractDays(days) {
-                var result = CREATOR.PUB.DateTime.Current.date;
-
-                result.setDate(result.getDate() - days);
-
-                return result;
-            }
+        }
+    },
+    Utility: {
+        randomInterval: function randomInterval(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
         },
-        Common: {
-            siteId: function siteId() {
-                var result = $("#lc-common-site-id").val();
+        fileExists: function fileExists(url) {
+            var result = false;
+            var xhr = new XMLHttpRequest();
+            xhr.open('HEAD', url, false);
+            xhr.send();
 
-                return parseInt(result);
-            },
-            appId: function appId(callback) {
-                if (CREATOR.PUB.Common.siteId() > 0) {
-                    CREATOR.Ajax.Invoke(null, "Site", "GetSite", { "id": CREATOR.PUB.Common.siteId() }, null, "GET", function (result) {
-                        if (!CREATOR.PUB.State.isEmpty(callback)) {
-                            callback(result.id);
-                        }
-                    });
-                }
-            },
-            isDevelopment: function isDevelopment() {
-                var result = -1;
-                var $elm = $("#lc-common-is-development");
-
-                if (!CREATOR.PUB.State.isEmpty($elm)) {
-                    if ($.isNumeric($elm.val())) {
-                        result = parseInt($elm.val());
-                    }
-                }
-
-                return CREATOR.PUB.Cast.toBool(result);
-            },
-            creds: function creds(callback) {
-                var url = "/SECURE/creds.json";
-
-                if (CREATOR.PUB.Utility.fileExists(url)) {
-                    CREATOR.API.Ajax.GetJSON(url, success);
-                } else {
-                    CREATOR.PUB.Utility.Console.error("creds.json doesn't exists. \"" + url + "\"");
-                }
-
-                function success(data) {
-                    callback(data);
-                }
+            if (xhr.status !== 404) {
+                result = true;
             }
+
+            xhr = null;
+
+            return result;
+        }
+    },
+    Console: {
+        basic: function basic(content) {
+            C.Console.invoke(C.Const.ConsoleTypes.BASIC, content);
         },
-        Utility: {
-            fileExists: function fileExists(url) {
-                var result = false;
-                var xhr = new XMLHttpRequest();
-                xhr.open('HEAD', url, false);
-                xhr.send();
-
-                if (xhr.status !== 404) {
-                    result = true;
-                }
-
-                xhr = null;
-
-                return result;
-            },
-            Console: {
-                basic: function basic(content) {
-                    if (CREATOR.PUB.Common.isDevelopment()) {
+        debug: function debug(content) {
+            C.Console.invoke(C.Const.ConsoleTypes.DEBUG, content);
+        },
+        error: function error(content) {
+            C.Console.invoke(C.Const.ConsoleTypes.ERROR, content);
+        },
+        invoke: function invoke(type, content) {
+            if (C.Common.isDevelopment()) {
+                switch (type) {
+                    case C.Const.ConsoleTypes.BASIC:
                         console.log(content);
-                    }
-                },
-                error: function error(content) {
-                    if (CREATOR.PUB.Common.isDevelopment()) {
+                        break;
+
+                    case C.Const.ConsoleTypes.DEBUG:
+                        console.debug(content);
+                        break;
+
+                    case C.Const.ConsoleTypes.ERROR:
                         console.error(content);
-                    }
-                }
-            },
-            Log: {
-                warning: function warning(content) {},
-                dbLog: function dbLog(content) {}
-            }
-        },
-        State: {
-            isEmpty: function isEmpty(val) {
-                var result = true;
-
-                if (typeof val !== "undefined" && val !== null) {
-                    result = val.length === 0;
-                }
-
-                return result;
-            },
-            isEqual: function isEqual(val1, val2) {
-                return val1 === val2;
-            },
-            isEmail: function isEmail(email) {
-                var result = false;
-                var reg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-                if (reg.test(email)) {
-                    result = true;
-                }
-
-                return result;
-            },
-            isURL: function isURL(url) {
-                var result = false;
-                var reg = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
-
-                if (reg.test(url)) {
-                    result = true;
-                }
-
-                return result;
-            },
-            isBool: function isBool(val) {
-                var result = false;
-
-                switch (val.toLowerCase()) {
-                    case "true":
-                    case "false":
-                    case "1":
-                    case "0":
-                        result = true;
                         break;
                 }
-
-                return result;
             }
+        }
+    },
+    Log: {
+        info: function info(content) {
+            C.Log.invoke(C.Const.LogTypes.INFO, content);
         },
-        Math: {
-            roundUp: function roundUp(val) {
-                var result = this;
-                var separator = undefined;
+        warning: function warning(content) {
+            C.Log.invoke(C.Const.LogTypes.WARNING, content);
+        },
+        exception: function exception(content) {
+            var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-                if (!$.isNumeric(val)) {
-                    CREATOR.PUB.Utility.Console.error("RoundUp", "Supplied value \"" + val + "\" not numeric");
-                } else {
-                    if (val.indexOf(".") > 0) {
-                        separator = ".";
-                    } else if (val.indexOf(",") > 0) {
-                        separator = ",";
+            C.Log.invoke(C.Const.LogTypes.EXCEPTION, content, params);
+        },
+        invoke: function invoke(type, content) {
+            var params = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+        }
+    },
+    State: {
+        isEmpty: function isEmpty(val) {
+            var result = true;
+
+            if (typeof val !== "undefined" && val !== null) {
+                result = val.length === 0;
+            }
+
+            return result;
+        },
+        isEqual: function isEqual(val1, val2) {
+            return val1 === val2;
+        },
+        isEmail: function isEmail(email) {
+            var result = false;
+            var reg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+            if (reg.test(email)) {
+                result = true;
+            }
+
+            return result;
+        },
+        isURL: function isURL(url) {
+            var result = false;
+            var reg = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
+
+            if (reg.test(url)) {
+                result = true;
+            }
+
+            return result;
+        },
+        isBool: function isBool(val) {
+            var result = false;
+
+            switch (val.toLowerCase()) {
+                case "true":
+                case "false":
+                case "1":
+                case "0":
+                    result = true;
+                    break;
+            }
+
+            return result;
+        }
+    },
+    Math: {
+        roundUp: function roundUp(val) {
+            var result = this;
+            var separator = undefined;
+
+            if (!$.isNumeric(val)) {
+                C.Console.error("RoundUp", "Supplied value \"" + val + "\" not numeric");
+            } else {
+                if (val.indexOf(".") > 0) {
+                    separator = ".";
+                } else if (val.indexOf(",") > 0) {
+                    separator = ",";
+                }
+
+                if (!separator.IsNull()) {
+                    var tmp1 = undefined,
+                        tmp2 = undefined;
+
+                    tmp1 = parseInt(val.substring(0, val.indexOf(separator)));
+                    tmp2 = parseInt(val.substring(val.indexOf(separator)));
+
+                    if (tmp >= 50) {
+                        result = tmp1 + 1;
                     }
-
-                    if (!separator.IsNull()) {
-                        var tmp1 = undefined,
-                            tmp2 = undefined;
-
-                        tmp1 = parseInt(val.substring(0, val.indexOf(separator)));
-                        tmp2 = parseInt(val.substring(val.indexOf(separator)));
-
-                        if (tmp >= 50) {
-                            result = tmp1 + 1;
-                        }
-                    }
                 }
-
-                return result;
             }
+
+            return result;
+        }
+    },
+    Cast: {
+        toBool: function toBool(val) {
+            var result = false;
+
+            switch (String(val).toLowerCase()) {
+                case "true":
+                case "1":
+                    result = true;
+                    break;
+            }
+
+            return result;
         },
-        Cast: {
-            toBool: function toBool(val) {
-                var result = false;
+        toCapitalCase: function toCapitalCase(val) {
+            var result = undefined;
 
-                switch (String(val).toLowerCase()) {
-                    case "true":
-                    case "1":
-                        result = true;
-                        break;
-                }
-
-                return result;
-            },
-            toCapitalCase: function toCapitalCase(val) {
-                var result = undefined;
-
-                if (!LC.PUB.State.isEmpty(val)) {
-                    result = val.substring(0, 1).toUpperCase() + val.substring(1);
-                }
-
-                return result;
-            },
-            toCamelCase: function toCamelCase(val) {
-                var result = undefined;
-                var vals = val.Split(" ");
-                var i = 0;
-
-                $.each(vals, function (val) {
-                    var word = CREATOR.PUB.State.toCapitalCase(val);
-
-                    result += i === 0 ? word : " " + word;
-
-                    i++;
-                });
-
-                return result;
-            },
-            toCamelCaseMerged: function toCamelCaseMerged(val) {
-                return CREATOR.PUB.Cast.ToCamelCase(val).replace(" ", "");
+            if (!LC.PUB.State.isEmpty(val)) {
+                result = val.substring(0, 1).toUpperCase() + val.substring(1);
             }
+
+            return result;
         },
-        Cookie: {
-            Get: function Get(name) {
-                return Cookies.Get(name);
-            },
-            Set: function Set(name, value) {
-                var expire = arguments.length <= 2 || arguments[2] === undefined ? 180 : arguments[2];
+        toCamelCase: function toCamelCase(val) {
+            var result = undefined;
+            var vals = val.Split(" ");
+            var i = 0;
 
-                Cookies.Set(name, value, { expires: expire, path: "" });
-            },
-            Delete: function Delete(name) {
-                Cookies.Remove(name, { expires: -1, path: "" });
-            },
-            DeleteAll: function DeleteAll() {
-                var cookies = [];
+            $.each(vals, function (val) {
+                var word = C.State.toCapitalCase(val);
 
-                var i = 1;
+                result += i === 0 ? word : " " + word;
 
-                $.each(Cookies.get(), function (cookie) {
-                    var name = cookie.name;
+                i++;
+            });
 
-                    CREATOR.PUB.Utility.Console.basic("Processing " + name);
+            return result;
+        },
+        toCamelCaseMerged: function toCamelCaseMerged(val) {
+            return C.Cast.ToCamelCase(val).replace(" ", "");
+        }
+    },
+    Cookie: {
+        Get: function Get(name) {
+            return Cookies.Get(name);
+        },
+        Set: function Set(name, value) {
+            var expire = arguments.length <= 2 || arguments[2] === undefined ? 180 : arguments[2];
 
-                    CREATOR.PUB.Cookie.Delete(name);
-                    result.push(name);
+            Cookies.Set(name, value, { expires: expire, path: "" });
+        },
+        Delete: function Delete(name) {
+            Cookies.Remove(name, { expires: -1, path: "" });
+        },
+        DeleteAll: function DeleteAll() {
+            var cookies = [];
 
-                    i++;
-                });
+            var i = 1;
 
-                CREATOR.PUB.Utility.Console.basic(i + " cookies deleted");
-            }
+            $.each(Cookies.get(), function (cookie) {
+                var name = cookie.name;
+
+                C.Console.basic("Processing " + name);
+
+                C.Cookie.Delete(name);
+                result.push(name);
+
+                i++;
+            });
+
+            C.Console.basic(i + " cookies deleted");
         }
     },
     Ajax: {
@@ -551,7 +313,7 @@ var CREATOR = {
             var type = arguments.length <= 5 || arguments[5] === undefined ? "GET" : arguments[5];
             var callback = arguments.length <= 6 || arguments[6] === undefined ? null : arguments[6];
 
-            var url = CREATOR.Ajax.GetUrl(host, controller, action, query);
+            var url = C.Ajax.GetUrl(host, controller, action, query);
             var timeStart = new Date();
 
             $.ajax({
@@ -561,16 +323,16 @@ var CREATOR = {
                 dataType: "JSON",
                 contentType: "application/json",
                 success: function success(result) {
-                    CREATOR.PUB.Utility.Console.basic({ duration: (new Date() - timeStart) / 1000, url: url, data: data });
+                    C.Console.basic({ duration: (new Date() - timeStart) / 1000, url: url, data: data });
 
-                    if (!CREATOR.PUB.State.isEmpty(callback)) {
+                    if (!C.State.isEmpty(callback)) {
                         callback(result);
                     }
                 },
                 error: function error(xhr, status, _error) {
-                    CREATOR.PUB.Utility.Console.error({ error: _error });
-                    CREATOR.PUB.Utility.Console.error({ status: status });
-                    CREATOR.PUB.Utility.Console.error({ xhr: xhr });
+                    C.Console.error({ error: _error });
+                    C.Console.error({ status: status });
+                    C.Console.error({ xhr: xhr });
                 }
             });
         },
@@ -580,7 +342,7 @@ var CREATOR = {
             if (action === undefined) action = null;
             if (query === undefined) query = {};
 
-            $.getJSON(CREATOR.Ajax.GetUrl(host, controller, action, query), success);
+            $.getJSON(C.Ajax.GetUrl(host, controller, action, query), success);
 
             function success(data) {
                 callback(data);
@@ -591,15 +353,15 @@ var CREATOR = {
 
             var result = "";
 
-            if (!CREATOR.PUB.State.isEmpty(host)) {
+            if (!C.State.isEmpty(host)) {
                 result = host;
             }
 
-            if (!CREATOR.PUB.State.isEmpty(controller)) {
+            if (!C.State.isEmpty(controller)) {
                 result += "/" + controller;
             }
 
-            if (!CREATOR.PUB.State.isEmpty(action)) {
+            if (!C.State.isEmpty(action)) {
                 result += "/" + action;
             }
 
@@ -618,7 +380,7 @@ var CREATOR = {
                 i++;
             });
 
-            if (!CREATOR.PUB.State.isEmpty(tmp)) {
+            if (!C.State.isEmpty(tmp)) {
                 result += tmp;
             }
 
@@ -626,13 +388,33 @@ var CREATOR = {
         }
     },
     Const: {
-        ModalBlackoutName: "modalBlackout"
+        ModalBlackoutName: "modalBlackout",
+        ConsoleTypes: {
+            BASIC: 0,
+            DEBUG: 1,
+            ERROR: 2
+        },
+        MediaSizes: {
+            XS: 0,
+            MD: 1,
+            LG: 2,
+            XL: 3
+        },
+        MediaOrientation: {
+            Portrait: 0,
+            Landscape: 1
+        },
+        LogTypes: {
+            INFO: 0,
+            WARNING: 1,
+            EXCEPTION: 2
+        }
     }
 };
 
 (function ($) {
     $.fn.ToBool = function () {
-        var result = CREATOR.PUB.Cast.toBool(this.val());
+        var result = C.Cast.toBool(this.val());
 
         return result;
     };
@@ -642,15 +424,15 @@ var CREATOR = {
     };
 
     $.fn.IsEqual = function (val) {
-        return CREATOR.PUB.State.isEqual(val, this.val());
+        return C.State.isEqual(val, this.val());
     };
 
     $.fn.IsBool = function () {
-        return CREATOR.PUB.State.isBool(this.val());
+        return C.State.isBool(this.val());
     };
 
     $.fn.IsEmail = function () {
-        return CREATOR.PUB.State.isEmail(this.val());
+        return C.State.isEmail(this.val());
     };
 
     $.fn.IsEmailAsInt = function () {
@@ -664,7 +446,7 @@ var CREATOR = {
     };
 
     $.fn.IsURL = function () {
-        return CREATOR.PUB.State.isURL(this.val());
+        return C.State.isURL(this.val());
     };
 
     $.fn.IsURLAsInt = function () {
@@ -678,21 +460,21 @@ var CREATOR = {
     };
 
     $.fn.IsEmpty = function () {
-        var result = CREATOR.PUB.State.isEmpty(this.val());
+        var result = C.State.isEmpty(this.val());
 
         return result;
     };
 
     $.fn.ToCapitalCase = function () {
-        return CREATOR.Cast.toCapitalCase(this.val());
+        return C.Cast.toCapitalCase(this.val());
     };
 
     $.fn.ToCamelCase = function () {
-        return CREATOR.PUB.Cast.toCamelCase(this.val());
+        return C.Cast.toCamelCase(this.val());
     };
 
     $.fn.ToCamelCaseMerged = function () {
-        return CREATOR.PUB.Cast.toCamelCaseMerged(this.val());
+        return C.Cast.toCamelCaseMerged(this.val());
     };
 
     $.fn.StartsWith = function (str) {
@@ -706,6 +488,115 @@ var CREATOR = {
     $.fn.SetCookie = function (name) {
         var expires = arguments.length <= 1 || arguments[1] === undefined ? 180 : arguments[1];
 
-        CREATOR.PUB.Cookie.Set(name, this.val(), expires);
+        C.Cookie.Set(name, this.val(), expires);
     };
 })(jQuery);
+
+
+"use strict";
+
+$(function () {
+    $(".chapter").find(".more.invoke").click(function () {
+        var $chapter = $(this).closest(".chapter");
+
+        $(this).fadeOut("fast", function () {
+            if (this.localName === "a") {
+                $($chapter).find(".content.main").fadeIn("slow");
+            } else {
+                $($chapter).find(".more.wrap").fadeOut("fast", function () {
+                    $($chapter).find(".content.main").fadeIn("slow");
+                });
+            }
+        });
+    });
+});
+
+
+"use strict";
+
+$(function () {
+    $(".show-modal[data-modal]").click(function (e) {
+        var modalId = $(this).data("modal");
+
+        $("#" + modalId).trigger("modal:show");
+    });
+
+    $("[class^='modal']").on("modal:show", function (e) {
+        var $modal = this;
+
+        var $bg = "<div id=\"modalBackground\"></div>";
+
+        $("body").append($bg);
+
+        $("#modalBackground").fadeIn("fast", function () {
+            $($modal).fadeIn("fast");
+
+            $("html, body").animate({
+                scrollTop: 0
+            }, 600);
+        });
+    });
+
+    $(".hide-modal").click(function (e) {
+        CloseModal();
+    });
+
+    $("[class^='modal']").on("modal:hide", function (e) {
+        CloseModal();
+    });
+
+    $(document).on("click", "#modalBackground", function () {
+        CloseModal();
+    });
+
+    $(document).on("keydown", function (e) {
+        if (e.keyCode === 27) {
+            CloseModal();
+        }
+    });
+
+    function CloseModal() {
+        $("[class^='modal']").hide();
+        $("#modalBackground").fadeOut("slow", function () {
+            $("#modalBackground").remove();
+        });
+    }
+});
+
+
+"use strict";
+
+$(document).ready(function () {
+    if ($("footer.creator").hasClass("sticky") || $("footer").hasClass("creator-sticky")) {
+        var resizeTimer;
+
+        $(window).on('resize', function (e) {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                handleResize();
+            }, 250);
+        });
+    }
+
+    function handleResize() {
+        if ($(body).height > $(window).height) {
+            $(".footer-sticky, .footer.sticky").removeClass("do-sticky");
+        } else {
+            $(".footer-sticky, .footer.sticky").addClass("do-sticky");
+        }
+    }
+});
+
+
+"use strict";
+
+$(function () {
+    $("[class^='align-vertical-']").parent().css("position", "relative");
+});
+
+
+"use strict";
+
+$(function () {
+    $("[class^='txt-disabled']").attr("readonly", "readonly");
+});
