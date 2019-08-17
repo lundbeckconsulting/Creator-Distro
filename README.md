@@ -13,7 +13,7 @@ Installation:
 
 You're done!
 
-Example:
+**Example**:
 ```
 <!DOCTYPE html>
 
