@@ -4,12 +4,10 @@ Here you find distributed files for Creator framework - a lightweight framework 
 
 Installation:
 
-1. Copy files from [Files](https://github.com/lundbeckconsulting/Creator-Distro/tree/master/Files)
-2. Create a folder for Creator CSS and SCRIPT and copy css and js files to folders
-3. Add references in your html:
+1. Add references in your html:
 
-* CSS: `<link href="/css/creator/creator.min.css" rel="stylesheet" />`
-* JS: `<script async="async" src="/script/creator/creator.min.js" type="application/javascript"></script>`
+* Style: `<link href="https://cdn.getcreatorframework.com/creator.min.css" rel="stylesheet" />`
+* Script: `<script async="async" src="https://cdn.getcreatorframework.com/creator.js" type="application/JAVASCRIPT"></script>`
 
 You're done!
 
@@ -18,21 +16,34 @@ You're done!
 ```html
 <!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" class="creator">
 <head>
     <meta charset="utf-8" />
     <title>Creator framework</title>
 
-    <link href="/css/creator/creator.min.css" rel="stylesheet" />
+    <link href="https://cdn.getcreatorframework.com/creator.min.css" rel="stylesheet" />
 </head>
-<body>
+<body class="size-xxl">
+    <header class="main">
+        <nav class="main">
+            <a href="linkOne.html" class="item">Link One</a><span class="separator">|</span><a href="linkTwo.html" class="item">Link Two</a>
+        </nav>
+    </header>
 
-    <script async="async" src="/script/creator/creator.min.js" type="application/javascript"></script>
+    <main role="main">
+        My Content
+    </main>
+
+    <footer class="align-center fixed">
+        MyFooter
+    </footer>
+
+    <script async="async" src="https://cdn.getcreatorframework.com/creator.js" type="application/JAVASCRIPT"></script>
 </body>
 </html>
 ```
 
 ****
-https://creatorframework.com | https://github.com/lundbeckconsulting/Creator | http://lundbeckconsulting.com
+https://getcreatorframework.com | https://github.com/lundbeckconsulting/Creator | http://lundbeckconsulting.com
 
 Do you want to create a modern responsive web framework with great features? You are always welcome to contribute to make Creator even better!
