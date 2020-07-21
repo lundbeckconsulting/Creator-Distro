@@ -1,4 +1,4 @@
-# Creator-Distro
+# ![Creator framework logo](http://shared.lundbeckconsulting.com/image/creator-logo-sm.png) Creator-Distro
 
 Here you find distributed files for Creator framework - a lightweight framework for modern responsive web design.
 
