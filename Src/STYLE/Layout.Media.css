@@ -1,106 +1,159 @@
-[class^="show-from-"] {
-  display: none; }
+﻿[class^="show-"] {
+  display: none !important;
+  visibility: hidden; }
 
-.show-sm {
-  display: none; }
+.hide {
+  display: none;
+  visibility: hidden; }
+  .hide-force {
+    display: none !important;
+    visibility: hidden !important; }
 
-.hide-sm {
-  display: block; }
+.show {
+  display: block;
+  visibility: visible; }
+  .show-force {
+    display: block !important;
+    visibility: visible !important; }
+  .show-inline {
+    display: inline-block;
+    visibility: visible; }
+    .show-inline-force {
+      display: inline-block !important;
+      visibility: visible !important; }
 
 @media (min-width: 576px) {
   .hide-sm {
-    display: none; }
+    display: none;
+    visibility: hidden; }
+    .hide-sm-force {
+      display: none !important;
+      visibility: hidden !important; }
   .show-sm {
-    display: block !important; }
+    display: block;
+    visibility: visible; }
+    .show-sm-force {
+      display: block !important;
+      visibility: visible !important; }
+    .show-sm-inline {
+      display: inline-block;
+      visibility: visible !important; }
+      .show-sm-inline-force {
+        display: inline-block !important;
+        visibility: visible !important; }
   .h1-sm {
-    font-size: 5.2rem !important; }
+    font-size: 4.4rem, 5.2rem; }
   .h2-sm {
-    font-size: 4.3rem !important; }
+    font-size: 3.6rem, 4rem; }
   .h3-sm {
-    font-size: 3rem !important; }
+    font-size: 3rem, 3.5rem; }
   .h4-sm {
-    font-size: 2.2rem !important; }
+    font-size: 2.2rem, 2.8rem; }
   .h5-sm {
-    font-size: 1.8rem !important; }
+    font-size: 1.7rem, 2rem; }
   .h6-sm {
-    font-size: 1.4rem !important; }
+    font-size: 1.2rem, 1.6rem; }
   .h7-sm {
-    font-size: 1.1rem !important; } }
-
-.show-md {
-  display: none; }
-
-.hide-md {
-  display: block; }
+    font-size: 0.8rem, 1rem; } }
 
 @media (min-width: 768px) {
   .hide-md {
-    display: none; }
+    display: none;
+    visibility: hidden; }
+    .hide-md-force {
+      display: none !important;
+      visibility: hidden !important; }
   .show-md {
-    display: block !important; }
+    display: block;
+    visibility: visible; }
+    .show-md-force {
+      display: block !important;
+      visibility: visible !important; }
+    .show-md-inline {
+      display: inline-block;
+      visibility: visible !important; }
+      .show-md-inline-force {
+        display: inline-block !important;
+        visibility: visible !important; }
   .h1-md {
-    font-size: 5.2rem !important; }
+    font-size: 4.4rem, 5.2rem; }
   .h2-md {
-    font-size: 4.3rem !important; }
+    font-size: 3.6rem, 4rem; }
   .h3-md {
-    font-size: 3rem !important; }
+    font-size: 3rem, 3.5rem; }
   .h4-md {
-    font-size: 2.2rem !important; }
+    font-size: 2.2rem, 2.8rem; }
   .h5-md {
-    font-size: 1.8rem !important; }
+    font-size: 1.7rem, 2rem; }
   .h6-md {
-    font-size: 1.4rem !important; }
+    font-size: 1.2rem, 1.6rem; }
   .h7-md {
-    font-size: 1.1rem !important; } }
-
-.show-lg {
-  display: none; }
-
-.hide-lg {
-  display: block; }
+    font-size: 0.8rem, 1rem; } }
 
 @media (min-width: 992px) {
   .hide-lg {
-    display: none; }
+    display: none;
+    visibility: hidden; }
+    .hide-lg-force {
+      display: none !important;
+      visibility: hidden !important; }
   .show-lg {
-    display: block !important; }
+    display: block;
+    visibility: visible; }
+    .show-lg-force {
+      display: block !important;
+      visibility: visible !important; }
+    .show-lg-inline {
+      display: inline-block;
+      visibility: visible !important; }
+      .show-lg-inline-force {
+        display: inline-block !important;
+        visibility: visible !important; }
   .h1-lg {
-    font-size: 5.2rem !important; }
+    font-size: 4.4rem, 5.2rem; }
   .h2-lg {
-    font-size: 4.3rem !important; }
+    font-size: 3.6rem, 4rem; }
   .h3-lg {
-    font-size: 3rem !important; }
+    font-size: 3rem, 3.5rem; }
   .h4-lg {
-    font-size: 2.2rem !important; }
+    font-size: 2.2rem, 2.8rem; }
   .h5-lg {
-    font-size: 1.8rem !important; }
+    font-size: 1.7rem, 2rem; }
   .h6-lg {
-    font-size: 1.4rem !important; }
+    font-size: 1.2rem, 1.6rem; }
   .h7-lg {
-    font-size: 1.1rem !important; } }
-
-.show-xl {
-  display: none; }
-
-.hide-xl {
-  display: block; }
+    font-size: 0.8rem, 1rem; } }
 
 @media (min-width: 1200px) {
   .hide-xl {
-    display: none; }
+    display: none;
+    visibility: hidden; }
+    .hide-xl-force {
+      display: none !important;
+      visibility: hidden !important; }
   .show-xl {
-    display: block !important; }
+    display: block;
+    visibility: visible; }
+    .show-xl-force {
+      display: block !important;
+      visibility: visible !important; }
+    .show-xl-inline {
+      display: inline-block;
+      visibility: visible !important; }
+      .show-xl-inline-force {
+        display: inline-block !important;
+        visibility: visible !important; }
   .h1-xl {
-    font-size: 5.2rem !important; }
+    font-size: 4.4rem, 5.2rem; }
   .h2-xl {
-    font-size: 4.3rem !important; }
+    font-size: 3.6rem, 4rem; }
   .h3-xl {
-    font-size: 3rem !important; }
+    font-size: 3rem, 3.5rem; }
   .h4-xl {
-    font-size: 2.2rem !important; }
+    font-size: 2.2rem, 2.8rem; }
   .h5-xl {
-    font-size: 1.8rem !important; }
+    font-size: 1.7rem, 2rem; }
   .h6-xl {
-    font-size: 1.4rem !important; }
+    font-size: 1.2rem, 1.6rem; }
   .h7-xl {
-    font-size: 1.1rem !important; } }
+    font-size: 0.8rem, 1rem; } }

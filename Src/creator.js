@@ -1,175 +1,197 @@
-$(function () {
-  $("[class^='align-vertical-']").parent().css("position", "relative");
-});
-//# sourceMappingURL=Element.Layout.Other.js.map
+"use strict";
 
+var styles = ["Bar", "Box"];
+var barPositions = ["Top", "Bottom"];
+var boxPositions = ["Top", "Bottom", "Left", "Right"];
+var durations = { Three: 3, Five: 5, Eight: 8, Fourteen: 14, Twenty: 20, Permanent: -99 };
 
-//# sourceMappingURL=Element.Layout.Other.min.js.map
+var _iteratorNormalCompletion = true;
+var _didIteratorError = false;
+var _iteratorError = undefined;
 
-$(function () {
-  $(".chapter").find(".more.invoke").click(function () {
-    var $chapter = $(this).closest(".chapter");
-    $(this).fadeOut("fast", function () {
-      if (this.localName === "a") {
-        $($chapter).find(".content.main").fadeIn("slow");
-      } else {
-        $($chapter).find(".more.wrap").fadeOut("fast", function () {
-          $($chapter).find(".content.main").fadeIn("slow");
+try {
+    var _loop = function () {
+        var style = _step.value;
+
+        jQuery.each(durations, function (duration, val) {
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+                for (var _iterator2 = boxPositions[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var position = _step2.value;
+
+                    handleNotifyElement(getElement(style, position, duration), parseInt(val.toString()));
+                }
+            } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+                        _iterator2["return"]();
+                    }
+                } finally {
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
+                    }
+                }
+            }
         });
-      }
-    });
-  });
-});
-//# sourceMappingURL=TagHelper.Chapter.js.map
+    };
 
-
-//# sourceMappingURL=TagHelper.Chapter.min.js.map
-
-$(function () {
-  function CloseModalBackground() {
-    $("#modalBackground").fadeOut("fast", function () {
-      $("#modalBackground").remove();
-    });
-  }
-
-  function TriggerCloseModal($modal) {
-    $($modal).trigger("modal:hidden");
-  }
-
-  function DoCloseModal($modal) {
-    $($modal).removeAttr("open");
-    TriggerCloseModal($modal);
-  }
-
-  function CloseModal(e, hideBG = true) {
-    var $modal = $(e.currentTarget).closest("[class^=\"modal-\"]");
-    DoCloseModal($modal);
-
-    if (hideBG) {
-      CloseModalBackground();
+    for (var _iterator = styles[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        _loop();
     }
-  }
-
-  function CloseAllModals() {
-    $("[class^=\"modal-\"][open=\"open\"]").each(function () {
-      DoCloseModal(this);
-    });
-    CloseModalBackground();
-  }
-
-  $(".show-modal[data-modal]").click(function (e) {
-    var modalId = $(this).data("modal");
-    $("#" + modalId).trigger("modal:show");
-  });
-  $("[class^=\"modal-\"]").on("modal:show", function (e) {
-    var $modal = this;
-    var $bg = "<div id=\"modalBackground\"></div>";
-    $("body").append($bg);
-    $("#modalBackground").fadeIn("slow", function () {
-      $($modal).attr("open", "open");
-      $($modal).trigger("modal:visible");
-      $("html, body").animate({
-        scrollTop: 0
-      }, 600);
-    });
-  });
-  $(".hide-modal").click(function (e) {
-    CloseModal(e);
-  });
-  $("[class^=\"modal-\"]").on("modal:hide", function (e) {
-    CloseModal(e);
-  });
-  $(document).on("click", "#modalBackground", function () {
-    CloseAllModals();
-  });
-  $(document).on("keydown", function (e) {
-    if (e.keyCode === 27) {
-      CloseAllModals();
-    }
-  });
-});
-//# sourceMappingURL=TagHelper.Modal.js.map
-
-
-//# sourceMappingURL=TagHelper.Modal.min.js.map
-
-$(() => {
-  const doLOG = entry => console.log(entry);
-
-  const doWARN = entry => console.warning(entry);
-
-  const doERROR = entry => console.error(entry);
-});
-//# sourceMappingURL=Utility.js.map
-
-
-//# sourceMappingURL=Utility.min.js.map
-
-$(() => {
-  var RequestModes = {
-    SameOrigin: "same-origin",
-    NoCors: "no-cors",
-    Cors: "cors"
-  };
-  var RequestMethods = {
-    GET: 0,
-    POST: 1,
-    PUT: 2,
-    DELETE: 3
-  };
-  var RequestCredentials = {
-    Include: "include",
-    Omit: "omit",
-    SameOrigin: "same-origin"
-  };
-
-  const RequestResult = (rsp, dt) => {
-    var response = rsp;
-    var data = dt;
-    var success = rsp.ok;
-    var status = rsp.status;
-    var statusText = rsp.statusText;
-  };
-
-  class WebRequest {
-    static async Call(controller, action, query = {}, data = {}, method = RequestMethods.POST, mode = RequestModes.SameOrigin, credentials = RequestCredentials.SameOrigin) {
-      var response = await fetch(WebRequest.GetUrl(controller, action, query), {
-        method: method.toUpperCase(),
-        headers: {
-          "Content-Type": "application/json"
-        },
-        credentials: credentials,
-        body: JSON.stringify(data),
-        mode: mode
-      });
-      response.json().then(function (data) {
-        return RequestResult(response, data);
-      });
-    }
-
-    static GetUrl(controller, action, query = {}) {
-      var result = "/" + controller + "/" + action;
-      var i = 0;
-
-      for (var q in query) {
-        if (i === 0) {
-          result += "?";
-        } else {
-          result += "&";
+} catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+} finally {
+    try {
+        if (!_iteratorNormalCompletion && _iterator["return"]) {
+            _iterator["return"]();
         }
+    } finally {
+        if (_didIteratorError) {
+            throw _iteratorError;
+        }
+    }
+}
 
-        result += q[0] + "=" + q[1];
-        i++;
-      }
+function getElement(style, position, duration) {
+    var result = ".notify-" + style + "-" + position + "-" + duration;
 
-      return result;
+    return result.toLowerCase();
+}
+
+function isBox(e) {
+    return $(e).find(".box").length > 0;
+}
+
+function handleNotifyElement(element, dur) {
+    if ($(element).hasClass("show")) {
+        setInterval(function () {
+            $(element).removeClass("show");
+        }, dur * 1000);
+    } else {
+        $(element).on("notify:show", function (e) {
+            $(element).fadeIn("slow", function () {
+                $(element).addClass("show");
+
+                if (dur != -99) {
+                    setTimeout(function () {
+                        $(element).removeClass("show");
+                    }, dur * 1000);
+                }
+            });
+        });
     }
 
-  }
+    $(element).on("notify:close", function () {
+        $(element).removeClass("show");
+    });
+}
+
+
+"use strict";
+
+$(".open-dialog[data-dialog]").click(function (e) {
+    var dialogId = $(this).data("dialog");
+
+    openDialog(dialogId);
 });
-//# sourceMappingURL=WebRequest.js.map
+
+$("dialog[class^=\"dialog-\"]").find("header .close-command").click(function (e) {
+    var dialog = $(this).closest("dialog");
+
+    $(dialog).trigger("command:close");
+
+    closeDialog(dialog.attr("id"));
+});
+
+$("dialog[class^=\"dialog-\"]").find("footer .ok-command").click(function () {
+    var dialog = $(this).closest("dialog");
+    $(dialog).closest("dialog").trigger("command:ok");
+
+    closeDialog(dialog.attr("id"));
+});
+
+$("dialog[class^='dialog-']").on("close", function (e) {
+    closeDialog($(this).attr("id"));
+});
+
+$("dialog[class^='dialog-']").on("open", function (e) {
+    openDialog($(this).attr("id"));
+});
+
+$("body").on("click", "#dialogBackground", function () {
+    $("dialog").removeAttr("open");
+
+    closeDialogBg();
+});
+
+$(document).keyup(function (e) {
+    if (e.key === "Escape") {
+        $("dialog").removeAttr("open");
+
+        closeDialogBg();
+    }
+});
+
+function openDialog(id) {
+    removeDialogBg();
+
+    $("body").append("<div id=\"dialogBackground\"></div>");
+
+    $("#dialogBackground").fadeIn("slow", function () {
+        $("#" + id).trigger("command:open");
+        $("#" + id).attr("open", "open");
+    });
+};
+
+function closeDialog(id) {
+    $("#" + id).removeAttr("open");
+    closeDialogBg();
+};
+
+function closeDialogBg() {
+    $("#dialogBackground").fadeOut("slow", function () {
+        removeDialogBg();
+    });
+};
+
+function removeDialogBg() {
+    $("body").remove("#dialogBackground");
+};
 
 
-//# sourceMappingURL=WebRequest.min.js.map
+"use strict";
 
-//# sourceMappingURL=Creator.js.map
+$("#burgerIcon").click(function () {
+    $("body").append("<div id=\"burgerMenuBackground\"></div>");
+
+    $("#burgerMenuBackground").fadeIn("slow", function () {
+        $("#burgerMenu").fadeIn("slow", function () {
+            $("#burgerMenuBackground").append("<span class=\"close-burger-menu\">X</span>");
+        });
+    });
+});
+
+$("body").on("click", "#burgerMenuBackground", function () {
+    closeMenu();
+});
+
+$("body").on("click", ".close-burger-menu", function () {
+    closeMenu();
+});
+
+function closeMenu() {
+    $("#burgerMenu").fadeOut("slow", function () {
+        $("#burgerMenuBackground").fadeOut("fast", function () {
+            $("#burgerMenuBackground").remove(".close-burger-menu");
+            $("body").remove("#burgerMenuBackground");
+        });
+    });
+}
+
